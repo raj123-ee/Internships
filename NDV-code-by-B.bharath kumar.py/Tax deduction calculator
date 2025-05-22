@@ -1,0 +1,86 @@
+# Internships
+This repo is mainly created for the internship students to check in code 
+# tax_calculator.py
+# Console-based Tax Calculator
+# Developed for CTC and Bonus-based Tax Comparison (Old vs New Regime)
+# Author: YOUR_NAME
+# GitHub: https://github.com/NDVtechsys/YOUR-REPO-NAME
+
+def calculate_old_regime_tax(income):
+    # Apply standard deduction and 80C
+    std_deduction = 50000
+    section_80c = 150000
+    taxable_income = max(0, income - std_deduction - section_80c)
+
+    # Old regime slabs (FY 2024-25)
+    tax = 0
+    if taxable_income <= 250000:
+        tax = 0
+    elif taxable_income <= 500000:
+        tax = (taxable_income - 250000) * 0.05
+    elif taxable_income <= 1000000:
+        tax = 12500 + (taxable_income - 500000) * 0.2
+    else:
+        tax = 112500 + (taxable_income - 1000000) * 0.3
+
+    return round(tax, 2)
+
+def calculate_new_regime_tax(income):
+    # No deductions under New Regime
+    taxable_income = income
+
+    # New regime slabs (FY 2024-25)
+    tax = 0
+    if taxable_income <= 300000:
+        tax = 0
+    elif taxable_income <= 600000:
+        tax = (taxable_income - 300000) * 0.05
+    elif taxable_income <= 900000:
+        tax = 15000 + (taxable_income - 600000) * 0.1
+    elif taxable_income <= 1200000:
+        tax = 45000 + (taxable_income - 900000) * 0.15
+    elif taxable_income <= 1500000:
+        tax = 90000 + (taxable_income - 1200000) * 0.2
+    else:
+        tax = 150000 + (taxable_income - 1500000) * 0.3
+
+    return round(tax, 2)
+
+def compare_regimes(ctc, bonus):
+    total_income = ctc + bonus
+    old_tax = calculate_old_regime_tax(total_income)
+    new_tax = calculate_new_regime_tax(total_income)
+
+    print(f"\nTotal Income: Rs.{total_income}")
+    print(f"Old Regime Tax Deduction: Rs.{old_tax}")
+    print(f"New Regime Tax Deduction: Rs.{new_tax}")
+
+    if old_tax < new_tax:
+        print(f"You save Rs.{new_tax - old_tax} more using the Old Regime.")
+    elif new_tax < old_tax:
+        print(f"You save Rs.{old_tax - new_tax} more using the New Regime.")
+    else:
+        print("Both regimes result in the same tax deduction.")
+
+def main():
+    while True:
+        print("\n--- Tax Calculator Menu ---")
+        print("1. Calculate Tax")
+        print("2. Exit")
+        choice = input("Enter your choice (1/2): ")
+
+        if choice == '1':
+            try:
+                ctc = float(input("Enter your CTC: "))
+                bonus = float(input("Enter your Bonus: "))
+                compare_regimes(ctc, bonus)
+            except ValueError:
+                print("Invalid input! Please enter numeric values.")
+        elif choice == '2':
+            print("Thank you for using the Tax Calculator!")
+            break
+        else:
+            print("Invalid choice. Please select 1 or 2.")
+
+if __name__ == "__main__":
+    main()
